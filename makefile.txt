@@ -1,0 +1,14 @@
+CC = gcc
+MAIN = main
+STATICL = libptask
+LIB = -lptask 
+LIBS = `allegro-config --cflags --libs`
+TAR = extract
+CFLAGS = -L. -lrt -pthread -isystemptask -Wall -O2 -lm -lptask -g
+
+program :
+	$(CC) main.c tasks.c -o main $(LIBS) $(CFLAGS)
+
+clean :
+	rm -rf main
+
