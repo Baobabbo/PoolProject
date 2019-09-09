@@ -4,7 +4,7 @@ MAIN = main
 #---------------------------------------------------------
 # Source files to be compiled when necessary
 #---------------------------------------------------------
-SRC = init_t ball_t graphics_t user_t
+SRC = init_t ball_t graphics_t user_t utils
 #---------------------------------------------------------
 # CC is the compiler to be used
 #---------------------------------------------------------

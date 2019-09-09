@@ -13,6 +13,29 @@ sem_t semball[NUM_BALLS];
 sem_t semmain;
 sem_t semuser;
 
+// initialization of balls
+void init_balls(void) {
+  int i;
+  char percorso[] = "img/balls/";
+  char ext[] = ".bmp";
+  char tmp[255];
+  char value_as_string[3];
+
+  // dim ball images 200X200
+  for (i = 0; i < NUM_BALLS; i++) {
+    reset(tmp);
+    itoa(i, value_as_string, 10);
+    strcat(tmp, percorso);
+    strcat(tmp, value_as_string);
+    strcat(tmp, ext);
+    balls[i] = load_bitmap(tmp, NULL);
+
+    if (balls[i] == NULL) {
+      printf("ERROR : BALL not found\n");
+      exit(1);
+    }
+  }
+}
 
 // initialization biliard cue
 void init_cue(void) {
@@ -46,7 +69,7 @@ void init() {
   install_keyboard();
   install_mouse();
   show_mouse(screen);
-  
+  init_balls();
   init_cue();
   init_bground();
   
