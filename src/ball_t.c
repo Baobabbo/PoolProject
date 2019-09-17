@@ -5,5 +5,8 @@
 #include "init_t.h"
 
 void ball_task(void){
-	// stuff
+	// task initialization
+	// ...
+	// continuous update of task position
+	// ...
 }
