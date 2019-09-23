@@ -18,6 +18,13 @@
 #define RESX 1280       // game resolution X
 #define RESY 720        // game resolution Y
 
+#define MS 34     // time between frames
+#define B_EX_T 15 // ball execution time
+#define B_DL 16   // ball deadline
+#define U_EX_T 4  // user execution time
+#define U_DL 21   // user deadline
+#define G_EX_T 18 // graphic execution
+
 //--- Structure definitions
 
 typedef struct{
