@@ -12,6 +12,28 @@ int graphics_id, user_id;
 sem_t semball[NUM_BALLS];
 sem_t semmain;
 sem_t semuser;
+position hole[HOLE];
+
+// position of holes
+void init_hole() {
+  hole[0].x = 70.0;
+  hole[0].y = 70.0;
+  hole[1].x = 641.0;
+  hole[1].y = 60.0;
+  hole[2].x = 1210.0;
+  hole[2].y = 70.0;
+  hole[3].x = 1210.0;
+  hole[3].y = 650.0;
+  hole[4].x = 641.0;
+  hole[4].y = 660.0;
+  hole[5].x = 70.0;
+  hole[5].y = 650.0;
+}
+
+// position of balls and biliard cue in the game table
+void init_game() {
+ //posizionamento delle palle sul bialiardo
+}
 
 // initialization of balls
 void init_balls(void) {
@@ -69,9 +91,11 @@ void init() {
   install_keyboard();
   install_mouse();
   show_mouse(screen);
+  init_hole();
   init_balls();
   init_cue();
   init_bground();
+  init_game();
   
 
   //  initialization of tasks with deadline

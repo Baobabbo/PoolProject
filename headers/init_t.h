@@ -64,5 +64,7 @@ extern void graphics_task(void);
 extern void user_task(void);
 
 extern void init();
+extern void init_game();
+extern position hole[];
 
 #endif // INIT_T_H
