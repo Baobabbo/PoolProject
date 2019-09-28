@@ -32,7 +32,7 @@ void init_hole() {
 
 // position of balls and biliard cue in the game table
 void init_game() {
- //posizionamento delle palle sul bialiardo
+	//posizionamento delle palle sul bialiardo
 }
 
 // initialization of balls
@@ -100,8 +100,8 @@ void init() {
 
   //  initialization of tasks with deadline
   ptask_init(SCHED_OTHER, GLOBAL, PRIO_INHERITANCE);
-
   
+  inde = 0;
 
   //  semaphore initialization
   for (int i = 0; i < NUM_BALLS; ++i) {

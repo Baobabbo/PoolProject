@@ -10,6 +10,16 @@ void update_ball(void){
 	// stuff
 }
 
+// Check if the deadline is missed
+
+void check_deadline_b(int num){
+	if(ptask_deadline_miss()){
+		sem_wait(&semmain);
+		printf("Ball Task num. %d has missed its deadline\n", num);
+		sem_post(&semmain);
+	}
+}
+
 // Body of ball processes
 
 void ball_task(void){
@@ -25,6 +35,7 @@ void ball_task(void){
 	while(1){
 		// aggiornamenti sicuri!
 		// ...
+		check_deadline_b(task_index);
 		ptask_wait_for_period();
 	}
 }

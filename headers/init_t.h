@@ -41,6 +41,11 @@ typedef struct{
 	int visible;
 }ball_attr;
 
+typedef struct{
+	speed sp;
+	int visible;
+}cue_attr;
+
 //--- Goblas variables
 
 extern sem_t semball[]; // semaphore for balls
