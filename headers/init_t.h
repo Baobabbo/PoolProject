@@ -25,6 +25,9 @@
 #define U_DL 21   // user deadline
 #define G_EX_T 18 // graphic execution
 
+// Game Table constants
+#define HOLE 6
+
 //--- Structure definitions
 
 typedef struct{

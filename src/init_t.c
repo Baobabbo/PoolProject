@@ -7,6 +7,7 @@ BITMAP *bground;
 BITMAP *cue;
 BITMAP *balls[NUM_BALLS];
 BITMAP *buf;
+int inde;
 
 int graphics_id, user_id;
 sem_t semball[NUM_BALLS];
