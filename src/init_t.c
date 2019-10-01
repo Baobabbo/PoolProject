@@ -7,6 +7,7 @@ BITMAP *bground;
 BITMAP *cue;
 BITMAP *balls[NUM_BALLS];
 BITMAP *buf;
+ball_attr ball[NUM_BALLS];
 int inde;
 
 int graphics_id, user_id;
@@ -34,6 +35,27 @@ void init_hole() {
 // position of balls and biliard cue in the game table
 void init_game() {
 	//posizionamento delle palle sul bialiardo
+  int i;
+  int row = 0;
+  int count = 0;
+  for (i = 0; i < NUM_BALLS; i++) {
+    // white ball
+    if (i == 0) {
+      ball[i].pos.x = 385 - 32;
+      ball[i].pos.y = (RESY / 2) - 32;
+    }
+    // other balls
+    else {
+      ball[i].pos.x = (RESX - 514) + (64 * row);
+      ball[i].pos.y = (RESY / 2 - 32 * (row + 1) + (64 * count));
+      count++;
+      if (count > row) {
+        row++;
+        count = 0;
+      }
+    }
+    ball[i].visible = 1;
+  }
 }
 
 // initialization of balls
