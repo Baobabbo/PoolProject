@@ -15,6 +15,8 @@
 
 //--- Constants
 #define NUM_BALLS 16    // number of biliard balls
+#define SP_LOSS 0.90    // speed loss for each update
+#define STR_SCALER 2.0  // speed multiplier
 #define RESX 1280       // game resolution X
 #define RESY 720        // game resolution Y
 

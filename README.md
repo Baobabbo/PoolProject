@@ -4,6 +4,11 @@ Real Time Project by Stefano Rossi and Riccardo Piccolo
 
 Simulated Pool game where each ball is a preiodic task and where the user can decide direction and intensity of its throw using the mouse.
 
+# Allegro Library
+We have used Allegro (version 4) Library that is an open suource graphic library for games.
+To install Allegro under Debian distributions execute this command from the terminal :
+	sudo apt‐get install liballegro4.4 liballegro4.4‐dev
+
 # Description
 
 - classic pool game, where the player has to pocket the balls
