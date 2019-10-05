@@ -6,7 +6,6 @@
 
 // Ball pasition and movement update function
 
-// update of ball movement
 void update_ball(int num) {
   if (!ball[num].visible)
     return;

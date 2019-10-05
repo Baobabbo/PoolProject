@@ -4,6 +4,12 @@
 
 #include "init_t.h"
 
+// Body of the user process
+
 void user_task(void) {
-	// user input management
+	// Inizializzazione del task TODO
+	
+	ptask_wait_for_activation();
+	
+	// Gestione Input TODO
 }
