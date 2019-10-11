@@ -26,7 +26,7 @@ void init_user(void) {
   click = 0;
   angle_fixed = itofix(0);
   angle = 0.0;
-  power = 500;
+  power = STICK_MIN;
   color = makecol(255, 255, 255);
   
 }
@@ -34,18 +34,25 @@ void init_user(void) {
 void op_mode(char *mode){
   switch (*mode) {
   case 0: // follow white ball
-    
+    m_x = mouse_x;
+    m_y = mouse_y;
+    delta_x = m_x - ball[0].pos.x;
+    delta_y = m_y - ball[0].pos.y;
+    angle = atan2(delta_y, delta_x);
+    angle_fixed = fixmul(ftofix(angle), radtofix_r);
+    break;
   case 1: // power choice
     power = power + step;
-    if (power == 650 || power == 500)
+    if (power == STICK_MAX || power == STICK_MIN)
       step = -step;
     break;
   case 2: // shooting choice
-    ball[0].sp.vx = (float)(power - 500) / 5;
-    ball[0].sp.vy = (float)(power - 500) / 5;
-
+    ball[0].sp.vx = (float)(power - STICK_MIN) / 5;
+    ball[0].sp.vy = (float)(power - STICK_MIN) / 5;
+	ball[0].sp.vx *= cos(angle);
+    ball[0].sp.vy *= sin(angle);
     *mode = 0;
-    power = 500;
+    power = STICK_MIN;
     step = abs(step);
     break;
   }
@@ -83,8 +90,9 @@ void user_task(void) {
     pivot_scaled_sprite(buf, cue, ball[0].pos.x, ball[0].pos.y, power, 7,
                         angle_fixed, ftofix(1.5));
 
+	sem_post(&semuser);
+	
     // point out to the graphic task to have finished the execution
-	// SEMAPHORE? YESS??
 	ptask_wait_for_activation();
 	}
 }

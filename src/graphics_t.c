@@ -30,6 +30,11 @@ void graphics_task(void) {
 					ball[i].pos.y - BALL_BMP_DIM / 2);
 			}
 		}
+		
+		// syncro btw user and graphics TODO
+		ptask_activate(user_id);
+		sem_wait(&semuser);
+		
 		// Everything in the buffer is moved to the screen
 		blit(buf, screen, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h, RESX,
 			RESY);

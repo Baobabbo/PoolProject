@@ -28,6 +28,10 @@
 #define U_DL 21   // user deadline
 #define G_EX_T 18 // graphic execution
 
+// constants of biliard cue
+#define STICK_MIN 468
+#define STICK_MAX 668
+
 // Game Table constants
 #define HOLE 6
 
