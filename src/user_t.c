@@ -62,7 +62,7 @@ void op_mode(char *mode){
 // Body of the user process
 // user chooses the angle and shooting power
 void user_task(void) {
-	// Inizializzazione del task TODO
+	
 
   ptask_set_priority(ptask_get_index(), 90);
   init_user();
@@ -90,9 +90,9 @@ void user_task(void) {
     pivot_scaled_sprite(buf, cue, ball[0].pos.x, ball[0].pos.y, power, 7,
                         angle_fixed, ftofix(1.5));
 
-	sem_post(&semuser);
+    sem_post(&semuser);
 	
     // point out to the graphic task to have finished the execution
-	ptask_wait_for_activation();
-	}
+    ptask_wait_for_activation();
+  }
 }
