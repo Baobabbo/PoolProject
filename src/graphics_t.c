@@ -43,14 +43,24 @@ void handle_ball_collisions() {
   
 }
 
+// check collision whit the border of game table
+void handle_table_collisions(void) {
+    
+}
+
+// notify player the game is finished
+void game_end(){
+    
+}
+
 // Body of the graphics process
 
 void graphics_task(void) {
 	// Screen refresh at each execution
 	
 	while(1){
-		// Gestione delle collisioni TODO
-		//handle_ball_collisions();
+		handle_table_collisions();
+		handle_ball_collisions();
 		blit(bground, buf, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h,
 			RESX, RESY);
 		for (i = 0; i < NUM_BALLS; i++) {
@@ -59,15 +69,22 @@ void graphics_task(void) {
 					ball[i].pos.y - BALL_BMP_DIM / 2);
 			}
 		}
-		
-		// syncro btw user and graphics TODO
-		ptask_activate(user_id);
-		sem_wait(&semuser);
-		
+		if(!ball[8].visible){
+            // game has ended
+            game_end();
+        }
+		else if (balls_stopped()) {
+            ptask_activate(user_id);
+            sem_wait(&semuser);
+        }
 		// Everything in the buffer is moved to the screen
 		blit(buf, screen, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h, RESX,
 			RESY);
-		 
+        // PROBABILMENTE NON NECESSARIO E DA RIMUOVERE... Da modificare anche 
+        // il task palla di conseguenza
+        for (i = 0; i < NUM_BALLS; i++) {
+            sem_post(&semball[i]);
+        }
 		check_deadline_g();
 		ptask_wait_for_period();
 	}
