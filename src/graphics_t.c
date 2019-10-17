@@ -5,6 +5,14 @@
 #include "init_t.h"
 float d;                // temporary variable for intersected balls
 
+// parameters used to compute dynamic ball collision
+float norm_x;
+float norm_y;
+float n1;
+float n2;
+float m1;
+float m2;
+
 //  Check if the deadline is missed
 
 void check_deadline_g(void) {
@@ -39,6 +47,25 @@ float intersected_balls(ball_attr a, ball_attr b) {
     return 0;
 }
 
+// compute a collision
+// TODO da modificare (non sono sicuro sia cosi la collisione dinamica)
+//lunghezza è la distanza tra due palle
+/*void compute_collision(void) {
+  norm_x = (ball[j].pos.x - ball[i].pos.x) / lunghezza;
+  norm_y = (ball[j].pos.y - ball[i].pos.y) / lunghezza;
+  
+  n1 = ball[i].sp.vx * norm_x + ball[i].sp.vy * norm_y;
+  n2 = ball[j].sp.vx * norm_x + ball[j].sp.vy * norm_y;
+  
+  m1 = (2.0 * n2) / 2;
+  m2 = (2.0 * n1) / 2;
+
+  ball[i].sp.vx = norm_x * m1;
+  ball[i].sp.vy = norm_y * m1;
+  ball[j].sp.vx = norm_x * m2;
+  ball[j].sp.vy = norm_y * m2;
+}*/
+
 void handle_ball_collisions() {
   
 }
@@ -50,6 +77,15 @@ void handle_table_collisions(void) {
 
 // notify player the game is finished
 void game_end(){
+    rectfill(buf, 0, RESY / 2 - RESY/4, RESX, RESY/2 + RESY/4, 0);
+    textout_centre_ex(buf, font, "GIOCO FINITO", RESX/2, RESY/2 - 100, 
+makecol(255,255, 0), -1);
+    char message[] = "per ricominciare premere R, per terminare premere ESC";
+    textout_centre_ex(buf, font, message, RESX/2, RESY/2, 
+makecol(255,255, 0), -1);
+    if(key[KEY_R]){
+        init_game();
+    }
     
 }
 
