@@ -59,6 +59,44 @@ void op_mode(char *mode){
 
 }
 
+// Prototipo calcolo traiettoria
+void trajectory(){
+    double m = ((float)m_y - ball[0].pos.y) / ((float)m_x - ball[0].pos.x);
+    double q = ball[0].pos.y;
+    float delta_x = (float)m_x - ball[0].pos.x;
+    float delta_y = m_y - ball[0].pos.y;
+    float p_y= ball[0].pos.x, p_x, distance;
+    for(p_x = ball[0].pos.x; ;){
+        if(abs(p_x) >= 3000 || abs(p_y) >= 3000){
+            printf("Uscito 1\n");
+            break;
+        }
+        
+        for(int i = 1; i < NUM_BALLS; i++){
+            distance = sqrt((p_x - ball[i].pos.x)*(p_x - ball[i].pos.x) + (p_y 
+- ball[i].pos.y)*(p_y - ball[i].pos.y));
+            if(distance <= BALL_RADIUS){
+                printf("Uscito 2\n");
+                break;
+            }
+        }
+        if(distance <= BALL_RADIUS){
+            printf("Uscito 3\n");
+            break;
+        }
+        
+        if(signbit(delta_x))
+            p_x--;
+        else
+            p_x++;
+        p_y = (m*p_x) + q;
+    }
+    // draw the line and the cue whit new position
+    line(buf, ball[0].pos.x, ball[0].pos.y, p_x, p_y, makecol(255,0,0));
+    pivot_scaled_sprite(buf, cue, ball[0].pos.x, ball[0].pos.y, power, 7,
+                        angle_fixed, ftofix(1.5));
+}
+
 // Body of the user process
 // user chooses the angle and shooting power
 void user_task(void) {
