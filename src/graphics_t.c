@@ -8,6 +8,10 @@ float d;                // temporary variable for intersected balls
 // parameters used to compute dynamic ball collision
 float norm_x;
 float norm_y;
+float tg_x;
+float tg_y;
+float tg1;
+float tg2;
 float n1;
 float n2;
 float m1;
@@ -48,22 +52,28 @@ float intersected_balls(ball_attr a, ball_attr b) {
 }
 
 // compute a collision
-// TODO da modificare (non sono sicuro sia cosi la collisione dinamica)
+
 //lunghezza è la distanza tra due palle
 /*void compute_collision(void) {
   norm_x = (ball[j].pos.x - ball[i].pos.x) / lunghezza;
   norm_y = (ball[j].pos.y - ball[i].pos.y) / lunghezza;
-  
+  // tang computation
+  tg_x = -norm_y;
+  tg_y = norm_x;
+  //  vector tang computation
+  tg1 = ball[i].sp.vx * tg_x + ball[i].sp.vy * tg_y;
+  tg2 = ball[j].sp.vx * tg_x + ball[j].sp.vy * tg_y;
+  // vector norm computation
   n1 = ball[i].sp.vx * norm_x + ball[i].sp.vy * norm_y;
   n2 = ball[j].sp.vx * norm_x + ball[j].sp.vy * norm_y;
-  
+  // ball moment computation
   m1 = (2.0 * n2) / 2;
   m2 = (2.0 * n1) / 2;
 
-  ball[i].sp.vx = norm_x * m1;
-  ball[i].sp.vy = norm_y * m1;
-  ball[j].sp.vx = norm_x * m2;
-  ball[j].sp.vy = norm_y * m2;
+  ball[i].sp.vx = tg_x * tg1 + norm_x * m1;
+  ball[i].sp.vy = tg_y * tg1 + norm_y * m1;
+  ball[j].sp.vx = tg_x * tg2 + norm_x * m2;
+  ball[j].sp.vy = tg_y * tg2 + norm_y * m2;
 }*/
 
 void handle_ball_collisions() {
