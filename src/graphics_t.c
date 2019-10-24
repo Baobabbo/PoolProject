@@ -3,6 +3,14 @@
 //--------------------------------------------------------
 
 #include "init_t.h"
+
+int i, j, sim;          // temporary variable
+float distance;         // distance bitween two balls
+int element;            // number of collided couples
+position o1, o2;        // original ball position
+speed v1, v2;           // vector velocity of balls
+int collided;           // collision flag
+float dist;
 float d;                // temporary variable for intersected balls
 
 // parameters used to compute dynamic ball collision
@@ -51,12 +59,33 @@ float intersected_balls(ball_attr a, ball_attr b) {
     return 0;
 }
 
+// TODO 
+int check_couple() {
+  
+}
+
+// Da FINIRE FORSE
+// starting parameters to compute simulation
+void init_simualtion(void) {
+  o1 = ball[i].pos;
+  o2 = ball[j].pos;
+  v1 = ball[i].sp;
+  v2 = ball[j].sp;
+  
+}
+
+//TODO 
+// compute a single simulation
+void simualtion(void) {
+  
+}
+
 // compute a collision
 
-//lunghezza è la distanza tra due palle
-/*void compute_collision(void) {
-  norm_x = (ball[j].pos.x - ball[i].pos.x) / lunghezza;
-  norm_y = (ball[j].pos.y - ball[i].pos.y) / lunghezza;
+
+void compute_collision(void) {
+  norm_x = (ball[j].pos.x - ball[i].pos.x) / distance;
+  norm_y = (ball[j].pos.y - ball[i].pos.y) / distance;
   // tang computation
   tg_x = -norm_y;
   tg_y = norm_x;
@@ -74,9 +103,50 @@ float intersected_balls(ball_attr a, ball_attr b) {
   ball[i].sp.vy = tg_y * tg1 + norm_y * m1;
   ball[j].sp.vx = tg_x * tg2 + norm_x * m2;
   ball[j].sp.vy = tg_y * tg2 + norm_y * m2;
-}*/
+}
 
 void handle_ball_collisions() {
+  element = 0;
+
+  for (i = 0; i < NUM_BALLS; i++) {
+    for (j = 0; j < NUM_BALLS; j++) {
+      if (ball[i].visible && ball[j].visible)
+        if (i != j) {
+          init_simualtion();
+          for (sim = 0; sim < SIM; sim++) {
+            ball[i].pos.x += ball[i].sp.vx;
+            ball[i].pos.y += ball[i].sp.vy;
+            ball[j].pos.x += ball[j].sp.vx;
+            ball[j].pos.y += ball[j].sp.vy;
+            distance = intersected_balls(ball[i], ball[j]);
+            if (distance > 0.0 && !check_couple()) {
+              simualtion();
+              break;
+            } else
+              collided = 0;
+          }
+          if (collided) {
+            ball[i].sp = v1;
+            ball[j].sp = v2;
+            collided = 0;
+            distance = sqrt((ball[i].pos.x - ball[j].pos.x) *
+                                (ball[i].pos.x - ball[j].pos.x) +
+                            (ball[i].pos.y - ball[j].pos.y) *
+                                (ball[i].pos.y - ball[j].pos.y));
+           
+            if(!is_stopped(ball[i]) || !is_stopped(ball[j]))
+                compute_collision();
+          }
+          else {
+            // restore starting ball attributes
+            ball[i].pos = o1;
+            ball[j].pos = o2;
+            ball[i].sp = v1;
+            ball[j].sp = v2;
+          }
+        }
+    }
+  }
   
 }
 
