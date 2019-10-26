@@ -6,10 +6,13 @@
 
 int i, j, sim;          // temporary variable
 float distance;         // distance bitween two balls
+float overlap;          // overlap measure
+ball_cop coppiecol[64]; // collided couples
 int element;            // number of collided couples
 position o1, o2;        // original ball position
 speed v1, v2;           // vector velocity of balls
 int collided;           // collision flag
+float delta_x, delta_y; // distance on the x and y axes bitween ball center
 float dist;
 float d;                // temporary variable for intersected balls
 
@@ -49,7 +52,7 @@ char balls_stopped() {
   return 1;
 }
 
-// check intersected ofballs
+// check intersected balls
 float intersected_balls(ball_attr a, ball_attr b) {
   d = sqrt((a.pos.x - b.pos.x) * (a.pos.x - b.pos.x) +
            (a.pos.y - b.pos.y) * (a.pos.y - b.pos.y));
@@ -59,25 +62,40 @@ float intersected_balls(ball_attr a, ball_attr b) {
     return 0;
 }
 
-// TODO 
-int check_couple() {
-  
+int check_couple(char a, char b, int dim, ball_cop *p) {
+  int i;
+  for (i = 0; i < dim; i++) {
+    if ((p[i].first == a && p[i].second == b) ||
+        (p[i].second == a && p[i].first == b)) {
+      return 1;
+    }
+  }
+  return 0;
 }
 
-// Da FINIRE FORSE
 // starting parameters to compute simulation
 void init_simualtion(void) {
   o1 = ball[i].pos;
   o2 = ball[j].pos;
   v1 = ball[i].sp;
   v2 = ball[j].sp;
-  
+  ball[i].sp.vx /= SIM;
+  ball[i].sp.vy /= SIM;
+  ball[j].sp.vx /= SIM;
+  ball[j].sp.vy /= SIM;
 }
 
-//TODO 
 // compute a single simulation
 void simualtion(void) {
-  
+  collided = 1;
+  overlap = 0.5 * (distance - 2 * BALL_RADIUS);
+  ball[i].pos.x -= overlap * (ball[i].pos.x - ball[j].pos.x) / distance;
+  ball[i].pos.y -= overlap * (ball[i].pos.y - ball[j].pos.y) / distance;
+  ball[j].pos.x += overlap * (ball[i].pos.x - ball[j].pos.x) / distance;
+  ball[j].pos.y += overlap * (ball[i].pos.y - ball[j].pos.y) / distance;
+  coppiecol[element].first = i;
+  coppiecol[element].second = j;
+  element++;
 }
 
 // compute a collision
@@ -152,7 +170,35 @@ void handle_ball_collisions() {
 
 // check collision whit the border of game table
 void handle_table_collisions(void) {
-    
+
+  for (i = 0; i < NUM_BALLS; i++) {
+    check_hole(&ball[i]);
+    if (ball[i].visible) {
+      if (ball[i].pos.y <= BALL_RADIUS + TABLE_BORDER) {
+        ball[i].pos.y = BALL_RADIUS + TABLE_BORDER;
+        ball[i].sp.vy = -SP_LOSS * ball[i].sp.vy;
+      }
+      if (ball[i].pos.y >= RESY - TABLE_BORDER - BALL_RADIUS) {
+        ball[i].pos.y = RESY - TABLE_BORDER - BALL_RADIUS;
+        ball[i].sp.vy = -SP_LOSS * ball[i].sp.vy;
+      }
+      if (ball[i].pos.x >= RESX - TABLE_BORDER - BALL_RADIUS) {
+        ball[i].pos.x = RESX - TABLE_BORDER - BALL_RADIUS;
+        ball[i].sp.vx = -SP_LOSS * ball[i].sp.vx;
+      }
+      if (ball[i].pos.x <= BALL_RADIUS + TABLE_BORDER) {
+        ball[i].pos.x = BALL_RADIUS + TABLE_BORDER;
+        ball[i].sp.vx = -SP_LOSS * ball[i].sp.vx;
+      }
+    }
+  }
+  if (!ball[0].visible) {
+    ball[0].visible = 1;
+    ball[0].pos.x = 353 - 32;
+    ball[0].pos.y = RESY / 2 - 32;
+    ball[0].sp.vx = 0.0;
+    ball[0].sp.vy = 0.0;
+  }
 }
 
 // notify player the game is finished
