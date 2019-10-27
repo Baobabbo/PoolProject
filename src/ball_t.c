@@ -4,6 +4,16 @@
 
 #include "init_t.h"
 
+// Check if the deadline is missed
+
+void check_deadline_b(int num) {
+  if (ptask_deadline_miss()) {
+    sem_wait(&semmain);
+    printf("Ball Task num. %d has missed its deadline\n", num);
+    sem_post(&semmain);
+  }
+}
+
 // Ball pasition and movement update function
 
 void update_ball(int num) {
@@ -22,32 +32,22 @@ void update_ball(int num) {
   return;
 }
 
-// Check if the deadline is missed
-
-void check_deadline_b(int num){
-	if(ptask_deadline_miss()){
-		sem_wait(&semmain);
-		printf("Ball Task num. %d has missed its deadline\n", num);
-		sem_post(&semmain);
-	}
-}
-
 // Body of ball processes
 
-void ball_task(void){
-	// Task initialization
-	int task_index;
-	sem_wait(&semmain);
-	task_index = inde;
-	inde++;
-	sem_post(&semmain);
-	
-	// Continuous update of task position
-	
-	while(1){
-		sem_wait(&semball[task_index]);
-		update_ball(task_index);
-		check_deadline_b(task_index);
-		ptask_wait_for_period();
-	}
+void ball_task(void) {
+  // Task initialization
+  int task_index;
+  sem_wait(&semmain);
+  task_index = inde;
+  inde++;
+  sem_post(&semmain);
+
+  // Continuous update of task position
+
+  while (1) {
+    sem_wait(&semball[task_index]);
+    update_ball(task_index);
+    check_deadline_b(task_index);
+    ptask_wait_for_period();
+  }
 }

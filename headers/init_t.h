@@ -22,6 +22,7 @@
 #define STR_SCALER 2.0  // speed multiplier
 #define RESX 1280       // game resolution X
 #define RESY 720        // game resolution Y
+#define SIM 100.0       // number of simnulation for collision
 
 #define MS 34     // time between frames
 #define B_EX_T 15 // ball execution time
@@ -35,28 +36,36 @@
 #define STICK_MAX 668
 
 // Game Table constants
+#define TABLE_BORDER 70
 #define HOLE 6
+#define HOLE_RADIUS 50
 
 //--- Structure definitions
 
-typedef struct{
-	float x, y;
-}position;
+typedef struct {
+  float x, y;
+} position;
 
-typedef struct{
-	float vx, vy;
-}speed;
+typedef struct {
+  float vx, vy;
+} speed;
 
-typedef struct{
-	position pos;
-	speed sp;
-	int visible;
-}ball_attr;
+typedef struct {
+  position pos;
+  speed sp;
+  int visible;
+} ball_attr;
 
-typedef struct{
-	speed sp;
-	int visible;
-}cue_attr;
+typedef struct {
+  speed sp;
+  int visible;
+} cue_attr;
+
+// ball struct for couple
+typedef struct {
+  char first;
+  char second;
+} ball_cop;
 
 //--- Goblas variables
 
@@ -64,10 +73,9 @@ extern sem_t semball[]; // semaphore for balls
 extern sem_t semuser;   // semaphore for user
 extern sem_t semmain;   // main semaphore
 
-
+extern ball_attr ball[];
 extern int user_id, graphics_id; // ids for user and graphic tasks
-extern int inde;	// index variable for ball task initialization
-
+extern int inde;                 // index variable for ball task initialization
 
 //--- Bitmaps for game elements
 extern BITMAP *bground;

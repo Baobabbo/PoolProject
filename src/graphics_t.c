@@ -14,7 +14,7 @@ speed v1, v2;           // vector velocity of balls
 int collided;           // collision flag
 float delta_x, delta_y; // distance on the x and y axes bitween ball center
 float dist;
-float d;                // temporary variable for intersected balls
+float d; // temporary variable for intersected balls
 
 // parameters used to compute dynamic ball collision
 float norm_x;
@@ -43,7 +43,9 @@ char is_stopped(ball_attr ball) {
     return 0;
   return 1;
 }
+
 // check if the balls are still
+
 char balls_stopped() {
   for (int i = 0; i < NUM_BALLS; i++) {
     if (!is_stopped(ball[i]))
@@ -53,6 +55,7 @@ char balls_stopped() {
 }
 
 // check intersected balls
+
 float intersected_balls(ball_attr a, ball_attr b) {
   d = sqrt((a.pos.x - b.pos.x) * (a.pos.x - b.pos.x) +
            (a.pos.y - b.pos.y) * (a.pos.y - b.pos.y));
@@ -74,6 +77,7 @@ int check_couple(char a, char b, int dim, ball_cop *p) {
 }
 
 // starting parameters to compute simulation
+
 void init_simualtion(void) {
   o1 = ball[i].pos;
   o2 = ball[j].pos;
@@ -86,6 +90,7 @@ void init_simualtion(void) {
 }
 
 // compute a single simulation
+
 void simualtion(void) {
   collided = 1;
   overlap = 0.5 * (distance - 2 * BALL_RADIUS);
@@ -99,7 +104,6 @@ void simualtion(void) {
 }
 
 // compute a collision
-
 
 void compute_collision(void) {
   norm_x = (ball[j].pos.x - ball[i].pos.x) / distance;
@@ -137,7 +141,7 @@ void handle_ball_collisions() {
             ball[j].pos.x += ball[j].sp.vx;
             ball[j].pos.y += ball[j].sp.vy;
             distance = intersected_balls(ball[i], ball[j]);
-            if (distance > 0.0 && !check_couple()) {
+            if (distance > 0.0 && !check_couple(i, j, element, coppiecol)) {
               simualtion();
               break;
             } else
@@ -151,11 +155,10 @@ void handle_ball_collisions() {
                                 (ball[i].pos.x - ball[j].pos.x) +
                             (ball[i].pos.y - ball[j].pos.y) *
                                 (ball[i].pos.y - ball[j].pos.y));
-           
-            if(!is_stopped(ball[i]) || !is_stopped(ball[j]))
-                compute_collision();
-          }
-          else {
+
+            if (!is_stopped(ball[i]) || !is_stopped(ball[j]))
+              compute_collision();
+          } else {
             // restore starting ball attributes
             ball[i].pos = o1;
             ball[j].pos = o2;
@@ -165,10 +168,10 @@ void handle_ball_collisions() {
         }
     }
   }
-  
 }
 
 // check collision whit the border of game table
+
 void handle_table_collisions(void) {
 
   for (i = 0; i < NUM_BALLS; i++) {
@@ -202,52 +205,51 @@ void handle_table_collisions(void) {
 }
 
 // notify player the game is finished
-void game_end(){
-    rectfill(buf, 0, RESY / 2 - RESY/4, RESX, RESY/2 + RESY/4, 0);
-    textout_centre_ex(buf, font, "GIOCO FINITO", RESX/2, RESY/2 - 100, 
-makecol(255,255, 0), -1);
-    char message[] = "per ricominciare premere R, per terminare premere ESC";
-    textout_centre_ex(buf, font, message, RESX/2, RESY/2, 
-makecol(255,255, 0), -1);
-    if(key[KEY_R]){
-        init_game();
-    }
-    
+
+void game_end() {
+  rectfill(buf, 0, RESY / 2 - RESY / 4, RESX, RESY / 2 + RESY / 4, 0);
+  textout_centre_ex(buf, font, "GAME OVER", RESX / 2, RESY / 2 - 100,
+                    makecol(255, 255, 0), -1);
+  char message[] = "To restart press R, to finish press ESC";
+  textout_centre_ex(buf, font, message, RESX / 2, RESY / 2,
+                    makecol(255, 255, 0), -1);
+  if (key[KEY_R]) {
+    init_game();
+  }
 }
 
 // Body of the graphics process
 
 void graphics_task(void) {
-	// Screen refresh at each execution
-	
-	while(1){
-		handle_table_collisions();
-		handle_ball_collisions();
-		blit(bground, buf, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h,
-			RESX, RESY);
-		for (i = 0; i < NUM_BALLS; i++) {
-			if (ball[i].visible) {
-				draw_sprite(buf, balls[i], ball[i].pos.x - BALL_BMP_DIM / 2,
-					ball[i].pos.y - BALL_BMP_DIM / 2);
-			}
-		}
-		if(!ball[8].visible){
-            // game has ended
-            game_end();
-        }
-		else if (balls_stopped()) {
-            ptask_activate(user_id);
-            sem_wait(&semuser);
-        }
-		// Everything in the buffer is moved to the screen
-		blit(buf, screen, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h, RESX,
-			RESY);
-        // PROBABILMENTE NON NECESSARIO E DA RIMUOVERE... Da modificare anche 
-        // il task palla di conseguenza
-        for (i = 0; i < NUM_BALLS; i++) {
-            sem_post(&semball[i]);
-        }
-		check_deadline_g();
-		ptask_wait_for_period();
-	}
+
+  // Screen refresh at each execution
+
+  while (1) {
+    handle_table_collisions();
+    handle_ball_collisions();
+    blit(bground, buf, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h, RESX,
+         RESY);
+    for (i = 0; i < NUM_BALLS; i++) {
+      if (ball[i].visible) {
+        draw_sprite(buf, balls[i], ball[i].pos.x - BALL_BMP_DIM / 2,
+                    ball[i].pos.y - BALL_BMP_DIM / 2);
+      }
+    }
+    if (!ball[8].visible) {
+      // game has ended
+      game_end();
+    } else if (balls_stopped()) {
+      ptask_activate(user_id);
+      sem_wait(&semuser);
+    }
+    // Everything in the buffer is moved to the screen
+    blit(buf, screen, 0, 0, RESX / 2 - bground->w / 2, RESY - bground->h, RESX,
+         RESY);
+
+    for (i = 0; i < NUM_BALLS; i++) {
+      sem_post(&semball[i]);
+    }
+    check_deadline_g();
+    ptask_wait_for_period();
+  }
 }
