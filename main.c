@@ -11,6 +11,7 @@
 int main(void) {
   int i; // temporary variable
 
+  init();
 
   // balls task creation
   for (i = 0; i < NUM_BALLS; i++) {
@@ -21,8 +22,8 @@ int main(void) {
 
   // graphic task creation
   graphics_id = ptask_create_edf(graphics_task, MS, G_EX_T, MS, NOW);
-	
-  
+
+
 
   while (!key[KEY_ESC]){
   }
