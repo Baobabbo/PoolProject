@@ -170,6 +170,25 @@ void handle_ball_collisions() {
   }
 }
 
+// check ball collision whit hole
+void check_hole(ball_attr *b) {
+
+  int i;
+  if (!b->visible)
+    return;
+  for (i = 0; i < HOLE; i++) {
+    delta_x = (b->pos.x - hole[i].x);
+    delta_y = (b->pos.y - hole[i].y);
+    dist = sqrt((delta_x * delta_x) + (delta_y * delta_y));
+    if (dist <= HOLE_RADIUS) {
+      b->visible = 0;
+      b->sp.vx = 0;
+      b->sp.vy = 0;
+      break;
+    }
+  }
+}
+
 // check collision whit the border of game table
 
 void handle_table_collisions(void) {
