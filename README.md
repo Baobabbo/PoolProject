@@ -7,7 +7,19 @@ Simulated Pool game where each ball is a preiodic task and where the user can de
 # Allegro Library
 We have used Allegro (version 4) Library that is an open suource graphic library for games.
 To install Allegro under Debian distributions execute this command from the terminal :
-	sudo apt‐get install liballegro4.4 liballegro4.4‐dev
+- sudo apt‐get install liballegro4.4 liballegro4.4‐dev 
+<br/>or<br/>
+- https://wiki.allegro.cc/index.php?title=Allegro_4#Download
+
+# How to Use
+
+To compile and execute the program:
+- make
+- ./main
+
+To recompile the program:
+- make clean
+- make
 
 # Description
 
