@@ -14,6 +14,12 @@ fixed angle_fixed;    // allegro expression for float variable
 int step;             // power step
 int delta_x, delta_y; // different of position
 
+// variabili utilizzate per il calcolo della traiettoria
+position trj[3];
+int found;
+float m, q;
+int inc_x, inc_y;
+
 void init_user(void) {
   delta_x = 0;
   delta_y = 0;
@@ -57,48 +63,120 @@ void op_mode(char *mode) {
   }
 }
 
-// Prototipo calcolo traiettoria
-void trajectory() {
-  double m = ((float)m_y - ball[0].pos.y) / ((float)m_x - ball[0].pos.x);
-  double q = ball[0].pos.y;
-  float delta_x = (float)m_x - ball[0].pos.x;
-  float delta_y = m_y - ball[0].pos.y;
-  float p_y = ball[0].pos.x, p_x, distance;
-  for (p_x = ball[0].pos.x;;) {
-    if (abs(p_x) >= 3000 || abs(p_y) >= 3000) {
-      printf("Uscito 1\n");
-      break;
-    }
+float get_distance(position first, position second){
+	return sqrt((first.x-second.x)*(first.x-second.x) + 
+		(first.y-second.y)*(first.y-second.y));
+}
 
-    for (int i = 1; i < NUM_BALLS; i++) {
-      distance = sqrt((p_x - ball[i].pos.x) * (p_x - ball[i].pos.x) +
-                      (p_y - ball[i].pos.y) * (p_y - ball[i].pos.y));
-      if (distance <= BALL_RADIUS) {
-        printf("Uscito 2\n");
-        break;
-      }
-    }
-    if (distance <= BALL_RADIUS) {
-      printf("Uscito 3\n");
-      break;
-    }
+void calc_factors(position first, position second){
+	m = (first.y - second.y) / (first.x - second.x);
+	q = first.y - m * first.x;
+	return;
+}
 
-    if (signbit(delta_x))
-      p_x--;
-    else
-      p_x++;
-    p_y = (m * p_x) + q;
-  }
-  // draw the line and the cue whit new position
-  line(buf, ball[0].pos.x, ball[0].pos.y, p_x, p_y, makecol(255, 0, 0));
-  pivot_scaled_sprite(buf, cue, ball[0].pos.x, ball[0].pos.y, power, 7,
-                      angle_fixed, ftofix(1.5));
+int trj_ball(position p){
+	for(int i = 1; i < NUM_BALLS; i++){
+		if(get_distance(p, ball[i].pos)<=BALL_RADIUS)
+			return 1;
+	}
+	return 0;
+}
+
+void trj_table(position p){
+	position aux;
+	if(p.y <= TABLE_BORDER || p.y >= RESY - TABLE_BORDER){
+		aux.y = trj[found].y;
+		aux.x = p.x + (p.x - trj[found].x);
+		calc_factors(p, aux);
+		found++;
+		trj[found] = p;
+		return;
+	}
+	if(p.x <= TABLE_BORDER || p.x >= RESX - TABLE_BORDER){
+		aux.x = trj[found].x;
+		aux.y = p.y + (p.y - trj[found].y);
+		calc_factors(p, aux);
+		found++;
+        inc_x = -inc_x;
+		trj[found] = p;
+		return;
+	}
+	return;
+}
+
+void find_trj(int operation){
+	position cur = ball[0].pos;
+    inc_x = 1; inc_y = 1;
+	switch(operation){
+		case 0:
+			if(m_x < cur.x)
+				inc_x = -1;
+			for(int i = cur.x; cur.x >= TABLE_BORDER && cur.x <= RESX - 
+                TABLE_BORDER; i += inc_x){
+                cur.x = i;
+				if(trj_ball(cur))
+					break; 
+			}
+			trj[1] = cur;
+			found = 1;
+			break;
+		case 1:
+			if(m_y < cur.y)
+				inc_y = -1;
+			for(int i = cur.y; cur.y >= TABLE_BORDER && cur.y <= RESY - 
+                TABLE_BORDER; i += inc_y){
+                cur.y = i;
+				if(trj_ball(cur))
+					break;
+			}
+			trj[1] = cur;
+			found = 1;
+			break;
+		case 2:
+			if(m_x < cur.x)
+				inc_x = -1;
+			while(1){
+				if(found == 2) break;
+				cur.x += inc_x;
+				cur.y = m * cur.x + q;
+				trj_table(cur);
+				if(trj_ball(cur)){
+					found++;
+					trj[found] = cur;
+				}
+			}
+			break;
+		
+	}
+}
+
+void compute_trajecotry(){
+    position m_p;
+    int op;
+	trj[0] = ball[0].pos;
+	found = 0;
+    m_p.x = m_x;
+    m_p.y = m_y;
+    // y = mx + q
+	if(trj[0].x == m_p.x){
+		// caso trj verticale
+		op = 0;
+	}
+	if(trj[0].y == m_p.y){
+		// caso trj orizzontale
+		op = 1;
+	}
+	else{
+		// caso "obliquo"
+		op = 2;
+		calc_factors(trj[0], m_p);
+	}
+	find_trj(op);
 }
 
 // Body of the user process
 // user chooses the angle and shooting power
 void user_task(void) {
-
   ptask_set_priority(ptask_get_index(), 90);
   init_user();
   ptask_wait_for_activation();
@@ -116,16 +194,15 @@ void user_task(void) {
       mode = 0;
       power = STICK_MIN;
     }
-
     op_mode(&mode);
-
+	compute_trajecotry();
+	for(int i = 0; i < found; i++){
+        line(buf, trj[i].x, trj[i].y, trj[i+1].x, trj[i+1].y, color);
+    }
     // draw the line and the cue whith new position
-    line(buf, ball[0].pos.x, ball[0].pos.y, m_x, m_y, color);
     pivot_scaled_sprite(buf, cue, ball[0].pos.x, ball[0].pos.y, power, 7,
                         angle_fixed, ftofix(1.5));
-
     sem_post(&semuser);
-
     // point out to the graphic task to have finished the execution
     ptask_wait_for_activation();
   }

@@ -18,7 +18,7 @@
 #define BALL_BMP_DIM 64 // ball bitmap dimension
 #define PI 3.14159265   // greek PI
 #define BALL_RADIUS 27  // radius of ball for collision
-#define SP_LOSS 0.90    // speed loss for each update
+#define SP_LOSS 0.98    // speed loss for each update
 #define STR_SCALER 2.0  // speed multiplier
 #define RESX 1280       // game resolution X
 #define RESY 720        // game resolution Y
