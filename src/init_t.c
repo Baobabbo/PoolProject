@@ -85,7 +85,7 @@ void init_balls(void) {
     balls[i] = load_bitmap(tmp, NULL);
 
     if (balls[i] == NULL) {
-      printf("ERROR : BALL %i not found\n",i);
+      printf("ERROR : BALL %i not found\n", i);
       exit(1);
     }
   }

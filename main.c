@@ -23,11 +23,16 @@ int main(void) {
   // graphic task creation
   graphics_id = ptask_create_edf(graphics_task, MS, G_EX_T, MS, NOW);
 
+  while (!key[KEY_ESC]) {
+  };
 
-
-  while (!key[KEY_ESC]){
+  for (i = 0; i < NUM_BALLS; i++) {
+    destroy_bitmap(balls[i]);
   }
-    ;
+  destroy_bitmap(bground);
+  destroy_bitmap(cue);
+  destroy_bitmap(buf);
+
   allegro_exit();
 
   return 0;
