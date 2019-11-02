@@ -36,7 +36,7 @@ To recompile the program:
 
 Main game screenshot:
 
-![Pool Table Image]("https://raw.githubusercontent.com/Baobabbo/PoolProject/master/img/readme/PoolScreen.PNG")
+![Pool Table Image](https://raw.githubusercontent.com/Baobabbo/PoolProject/master/img/readme/PoolScreen.PNG)
 
 
 # User Interface/User Interaction
