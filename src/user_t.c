@@ -18,7 +18,8 @@ int delta_x, delta_y; // different of position
 position trj[3];
 int found;
 float m, q;
-int inc_x, inc_y;
+float inc_x;
+int inc_y;
 
 void init_user(void) {
   delta_x = 0;
@@ -109,11 +110,11 @@ void find_trj(int operation){
     inc_x = 1; inc_y = 1;
 	switch(operation){
 		case 0:
-			if(m_x < cur.x)
-				inc_x = -1;
-			for(int i = cur.x; cur.x >= TABLE_BORDER && cur.x <= RESX - 
-                TABLE_BORDER; i += inc_x){
-                cur.x = i;
+			if(m_y < cur.y)
+				inc_y = -1;
+			for(int i = cur.y; i >= TABLE_BORDER && i <= RESY - 
+                TABLE_BORDER; i += inc_y){
+                cur.y = i;
 				if(trj_ball(cur))
 					break; 
 			}
@@ -121,11 +122,11 @@ void find_trj(int operation){
 			found = 1;
 			break;
 		case 1:
-			if(m_y < cur.y)
-				inc_y = -1;
-			for(int i = cur.y; cur.y >= TABLE_BORDER && cur.y <= RESY - 
-                TABLE_BORDER; i += inc_y){
-                cur.y = i;
+			if(m_x < cur.x)
+				inc_x = -1;
+			for(int i = cur.x; i >= TABLE_BORDER && i <= RESX - 
+                TABLE_BORDER; i += inc_x){
+                cur.x = i;
 				if(trj_ball(cur))
 					break;
 			}
@@ -134,7 +135,9 @@ void find_trj(int operation){
 			break;
 		case 2:
 			if(m_x < cur.x)
-				inc_x = -1;
+				inc_x = -0.1;
+            else
+                inc_x = 0.1;
 			while(1){
 				if(found == 2) break;
 				cur.x += inc_x;
@@ -146,7 +149,7 @@ void find_trj(int operation){
 				}
 			}
 			break;
-		
+            
 	}
 }
 
