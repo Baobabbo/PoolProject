@@ -34,6 +34,9 @@ To recompile the program:
 
 # Graphical Layout
 
+Main game screenshot:
+
+![Pool Table Image]("https://raw.githubusercontent.com/Baobabbo/PoolProject/master/img/readme/PoolScreen.PNG")
 
 
 # User Interface/User Interaction
