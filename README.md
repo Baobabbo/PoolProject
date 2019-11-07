@@ -7,9 +7,9 @@ Simulated Pool game where each ball is a preiodic task and where the user can de
 # Allegro Library
 
 We have used Allegro (version 4) Library that is an open suource graphic library for games.
-To install Allegro under Debian distributions execute this command from the terminal :
+To install Allegro under Debian-based distributions execute this command from the terminal :
 ```
-$sudo apt‐get install liballegro4.4 liballegro4.4‐dev 
+$ sudo apt‐get install liballegro4.4 liballegro4.4‐dev 
 ```
 <br/>For other Unix-like systems refer to:<br/>
 - https://wiki.allegro.cc/index.php?title=Allegro_4#Download
@@ -23,14 +23,14 @@ $sudo apt‐get install liballegro4.4 liballegro4.4‐dev
 
 To compile and execute the program:
 ```
-make
-./main
+$ make
+$ ./main
 ```
 
 To recompile the program:
 ```
-make clean
-make
+$ make clean
+$ make
 ```
 
 # Description
@@ -71,7 +71,15 @@ ESC: Quit application.
   - This task also handles the collision of the balls, the table borders and the holes.
   
 # Task Layout
-  
+
+![Task scheme:](https://raw.githubusercontent.com/Baobabbo/PoolProject/master/img/readme/PoolDiagram.png)
+
 # Collision Implementation
+The collisions in the game have been implemented in two ways: statically and dinamically.
 
+We have a static collision when a ball hits the table borders or holes; instead a dinamic collision occurs when a ball hits another ball.
 
+To compute dinamic collisions we have decided to simulate the movement of the balls involved to achieve an higher level of accuracy in the game  
+
+# Note
+This repository has a precompiled x86-64 executable. For other architectures it is required to recompile the ptask library and the project.
