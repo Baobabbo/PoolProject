@@ -8,23 +8,30 @@ Simulated Pool game where each ball is a preiodic task and where the user can de
 
 We have used Allegro (version 4) Library that is an open suource graphic library for games.
 To install Allegro under Debian distributions execute this command from the terminal :
-- sudo apt‐get install liballegro4.4 liballegro4.4‐dev 
-<br/>or<br/>
+```
+$sudo apt‐get install liballegro4.4 liballegro4.4‐dev 
+```
+<br/>For other Unix-like systems refer to:<br/>
 - https://wiki.allegro.cc/index.php?title=Allegro_4#Download
 
 # Other Library
+
 - Pthread: https://www.gnu.org/software/hurd/libpthread.html
 - Ptask: https://github.com/glipari/ptask
 
 # How to Use
 
 To compile and execute the program:
-- make
-- ./main
+```
+make
+./main
+```
 
 To recompile the program:
-- make clean
-- make
+```
+make clean
+make
+```
 
 # Description
 
@@ -66,3 +73,5 @@ ESC: Quit application.
 # Task Layout
   
 # Collision Implementation
+
+
