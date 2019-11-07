@@ -44,12 +44,12 @@ void init_game() {
     // white ball
     if (i == 0) {
       ball[i].pos.x = 385 - 32;
-      ball[i].pos.y = (RESY / 2) - 32;
+      ball[i].pos.y = (RESY / 2) ;
     }
     // other balls
     else {
-      ball[i].pos.x = (RESX - 514) + (64 * row);
-      ball[i].pos.y = (RESY / 2 - 32 * (row + 1) + (64 * count));
+      ball[i].pos.x = (RESX - 490) + (64 * row);
+      ball[i].pos.y = (RESY / 2 - 32 * (row ) + (64 * count));
       count++;
       if (count > row) {
         row++;
